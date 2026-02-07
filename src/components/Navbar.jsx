@@ -49,7 +49,7 @@ const Navbar = () => {
   return (
     <nav
       className={`
-        fixed top-0 w-full z-50 transition-all duration-300
+        fixed top-0 w-full z-[100] transition-all duration-300
         ${scrolled ? "backdrop-blur-xl bg-black/40 border-b border-white/10" : "bg-transparent"}
       `}
     >
@@ -81,11 +81,11 @@ const Navbar = () => {
           )}
 
           <div className="flex items-center gap-6 border-l border-white/20 pl-6 ml-2">
-            <Link to="/wishlist" className="hover:text-[#c9a36b] transition duration-300">
-                <Heart size={20} />
+            <Link to="/wishlist" className="relative group transition-transform active:scale-95">
+                <Heart size={20} className="group-hover:text-[#c9a36b] transition duration-300" />
             </Link>
-
-            <Link to="/cart" className="relative group">
+ 
+            <Link to="/cart" className="relative group transition-transform active:scale-95">
                 <ShoppingBag size={20} className="group-hover:text-[#c9a36b] transition duration-300" />
                 {cartCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-[#c9a36b] text-black text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
@@ -171,11 +171,15 @@ const Navbar = () => {
         </div>
 
         {/* Mobile right icons */}
-        <div className="flex items-center gap-6 md:hidden">
-          <Link to="/cart" className="relative">
+        <div className="flex items-center gap-5 md:hidden">
+          <Link to="/wishlist" className="relative p-2 active:scale-90 transition-transform">
+            <Heart size={22} />
+          </Link>
+          
+          <Link to="/cart" className="relative p-2 active:scale-90 transition-transform">
             <ShoppingBag size={22} />
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#c9a36b] text-black text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              <span className="absolute top-1 right-1 bg-[#c9a36b] text-black text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
                 {cartCount}
               </span>
             )}
@@ -184,6 +188,7 @@ const Navbar = () => {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
+            className="p-2 active:scale-90 transition-transform"
           >
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -193,36 +198,64 @@ const Navbar = () => {
       {/* Mobile Hamburger Menu */}
       <AnimatePresence>
         {menuOpen && (
-            <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
-            >
-                <div className="px-6 py-8 space-y-6 text-white text-center">
-                    <Link to="/shop" onClick={() => setMenuOpen(false)} className="block text-xl tracking-widest uppercase hover:text-[#c9a36b]">Shop</Link>
-                    <Link to="/about" onClick={() => setMenuOpen(false)} className="block text-xl tracking-widest uppercase hover:text-[#c9a36b]">About</Link>
-                    <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-xl tracking-widest uppercase hover:text-[#c9a36b]">Contact</Link>
-                    <Link to="/wishlist" onClick={() => setMenuOpen(false)} className="block text-xl tracking-widest uppercase hover:text-[#c9a36b]">Wishlist</Link>
-                    
-                    {user ? (
-                        <>
-                             {user.role === "admin" && (
-                                <Link to="/admin" onClick={() => setMenuOpen(false)} className="block text-xl tracking-widest uppercase hover:text-[#c9a36b]">Dashboard</Link>
-                             )}
-                            <Link to="/account" onClick={() => setMenuOpen(false)} className="block text-xl tracking-widest uppercase hover:text-[#c9a36b]">My Account</Link>
-                            <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="block w-full text-xl tracking-widest uppercase hover:text-red-400 text-gray-400">Logout</button>
-                        </>
-                    ) : (
-                        <button 
-                            onClick={() => { setAuthModal({ isOpen: true, mode: 'login' }); setMenuOpen(false); }}
-                            className="block w-full text-xl tracking-widest uppercase text-[#c9a36b]"
-                        >
-                            Login
-                        </button>
-                    )}
-                </div>
-            </motion.div>
+            <>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[-1]"
+                    onClick={() => setMenuOpen(false)}
+                />
+                <motion.div
+                    initial={{ x: "100%" }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "100%" }}
+                    transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                    className="md:hidden fixed top-0 right-0 h-screen w-[80%] bg-[#0a0a0a] border-l border-white/10 z-[100] shadow-2xl"
+                >
+                    <div className="flex flex-col h-full">
+                        <div className="flex justify-between items-center p-6 border-b border-white/5">
+                            <span className="text-[#c9a36b] font-serif tracking-widest uppercase text-xs">Navigation</span>
+                            <button onClick={() => setMenuOpen(false)} className="text-white hover:text-[#c9a36b]">
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="flex-1 px-8 py-12 space-y-8 overflow-y-auto">
+                            <Link to="/shop" onClick={() => setMenuOpen(false)} className="block text-2xl font-serif tracking-widest uppercase hover:text-[#c9a36b] transition">Shop</Link>
+                            <Link to="/about" onClick={() => setMenuOpen(false)} className="block text-2xl font-serif tracking-widest uppercase hover:text-[#c9a36b] transition">About</Link>
+                            <Link to="/contact" onClick={() => setMenuOpen(false)} className="block text-2xl font-serif tracking-widest uppercase hover:text-[#c9a36b] transition">Contact</Link>
+                            
+                            <div className="pt-8 border-t border-white/5 space-y-6">
+                                {user ? (
+                                    <>
+                                        <Link to="/account" onClick={() => setMenuOpen(false)} className="flex items-center gap-4 text-gray-400 hover:text-white uppercase tracking-widest text-sm transition font-medium">
+                                            <User size={18} className="text-[#c9a36b]" /> My Account
+                                        </Link>
+                                        
+                                        {user.role === "admin" && (
+                                            <Link to="/admin" onClick={() => setMenuOpen(false)} className="flex items-center gap-4 text-[#c9a36b] uppercase tracking-widest text-sm transition font-bold">
+                                                <LayoutDashboard size={18} /> Admin Dashboard
+                                            </Link>
+                                        )}
+
+                                        <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="flex items-center gap-4 text-red-500/70 hover:text-red-500 uppercase tracking-widest text-sm transition font-bold pt-4 border-t border-white/5">
+                                            <LogOut size={18} /> Logout
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button 
+                                        onClick={() => { setAuthModal({ isOpen: true, mode: 'login' }); setMenuOpen(false); }}
+                                        className="w-full py-4 border border-[#c9a36b] text-[#c9a36b] uppercase tracking-widest text-sm font-bold hover:bg-[#c9a36b] hover:text-black transition"
+                                    >
+                                        Client Login
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            </>
         )}
       </AnimatePresence>
 

@@ -11,7 +11,7 @@ const Button = ({
   ...props
 }) => {
   const baseStyles =
-    "inline-flex items-center justify-center transition-all duration-300 tracking-widest uppercase font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-sm";
+    "inline-flex items-center justify-center transition-all duration-300 tracking-widest uppercase font-medium focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed rounded-sm active:scale-95";
 
   const variants = {
     primary:

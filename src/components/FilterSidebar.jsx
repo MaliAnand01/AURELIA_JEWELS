@@ -32,7 +32,7 @@ const FilterSidebar = ({ isOpen, onClose, filters, setFilters }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] lg:hidden"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[80] lg:hidden"
           />
 
           {/* Sidebar */}
@@ -41,7 +41,7 @@ const FilterSidebar = ({ isOpen, onClose, filters, setFilters }) => {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-y-0 left-0 w-80 bg-[#0a0a0a] border-r border-white/10 z-[70] p-8 overflow-y-auto lg:relative lg:translate-x-0 lg:z-0 lg:w-64 lg:p-0 lg:bg-transparent lg:border-none"
+            className="fixed inset-y-0 left-0 w-80 bg-[#0a0a0a] border-r border-white/10 z-[90] p-8 pt-24 overflow-y-auto lg:relative lg:translate-x-0 lg:z-0 lg:w-64 lg:p-0 lg:bg-transparent lg:border-none"
           >
             <div className="flex justify-between items-center mb-10 lg:hidden">
               <h2 className="text-xl font-serif text-white">Filters</h2>

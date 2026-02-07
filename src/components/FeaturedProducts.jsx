@@ -15,8 +15,8 @@ const FeaturedProducts = () => {
   }, []);
 
   return (
-    <section className="bg-[#050505] max-w-[1920px] mx-auto px-6 py-32 md:px-12 border-b border-white/5">
-      <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+    <section className="bg-[#050505] max-w-[1920px] mx-auto px-6 py-20 md:py-32 md:px-12 border-b border-white/5">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
         <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}

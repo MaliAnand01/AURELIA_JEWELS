@@ -43,7 +43,7 @@ const Shop = () => {
   const categories = ["All", "Necklaces", "Rings", "Earrings", "Bracelets"];
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-6 max-w-[1920px] mx-auto lg:px-12">
+    <div className="min-h-screen pt-24 md:pt-32 pb-20 px-6 max-w-[1920px] mx-auto lg:px-12">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-serif text-white text-center mb-12 tracking-wide">
             Our Collection

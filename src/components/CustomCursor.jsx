@@ -16,7 +16,11 @@ const CustomCursor = () => {
       mouseY.set(e.clientY);
 
       const target = e.target;
-      if (target.closest('.group')) {
+      const isInput = target.closest('input, textarea, select');
+      
+      if (isInput) {
+        setCursorType('default');
+      } else if (target.closest('.group')) {
         setCursorType('lens');
       } else if (target.closest('button, a')) {
         setCursorType('pointer');

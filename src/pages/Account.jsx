@@ -51,117 +51,170 @@ const Account = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-32 text-white">
-      <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-8">
-        <div>
-            <h1 className="text-4xl font-serif mb-2">My Account</h1>
-            <p className="text-gray-400">Welcome back, <span className="text-[#c9a36b]">{user.name}</span></p>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8 border-b border-white/10 pb-12"
+      >
+        <div className="relative">
+            <h1 className="text-4xl md:text-5xl font-serif mb-4 tracking-wide">My Account</h1>
+            <div className="flex items-center gap-3">
+                <p className="text-gray-400">Welcome back, <span className="text-[#c9a36b] font-medium">{user.name}</span></p>
+                <div className="h-1 w-1 rounded-full bg-white/20" />
+                <span className={`text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-full border ${
+                    user.role === 'admin' 
+                    ? 'border-[#c9a36b] text-[#c9a36b] bg-[#c9a36b]/5' 
+                    : 'border-white/20 text-white/40'
+                }`}>
+                    {user.role === 'admin' ? 'Heritage Curator' : 'Heritage Member'}
+                </span>
+            </div>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4 pt-4 md:pt-0">
              {!isEditing && (
-                <Button onClick={() => setIsEditing(true)} variant="outline" size="sm">
-                    Edit Account Details
+                <Button onClick={() => setIsEditing(true)} variant="outline" size="sm" className="text-[10px] px-6">
+                    Update Details
                 </Button>
              )}
              {user.role === "admin" && (
-                 <Button onClick={() => navigate("/admin")} variant="outline" size="sm">
-                     Admin Dashboard
+                 <Button onClick={() => navigate("/admin")} variant="primary" size="sm" className="text-[10px] px-6">
+                     Access Dashboard
                  </Button>
              )}
-             <Button onClick={() => { logout(); navigate("/"); }} variant="secondary" size="sm">
+             <Button onClick={() => { logout(); navigate("/"); }} variant="secondary" size="sm" className="text-[10px] px-6">
                  Logout
              </Button>
         </div>
-      </div>
+      </motion.div>
 
       <div className="grid md:grid-cols-3 gap-12">
         {/* Profile Info */}
-        <div className="bg-white/5 p-8 border border-white/10 rounded-sm h-fit">
-            <h2 className="text-xl font-serif mb-6 tracking-wide border-b border-white/10 pb-4">Profile Details</h2>
-            <div className="space-y-6 text-sm tracking-wide">
-                <div>
-                    <span className="block text-gray-500 text-xs uppercase mb-2">Full Name</span>
+        <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-[#0a0a0a] p-8 border border-white/10 rounded-sm h-fit shadow-2xl backdrop-blur-3xl relative overflow-hidden"
+        >
+            <div className="absolute top-0 left-0 w-1 h-full bg-[#c9a36b]/30" />
+            <h2 className="text-lg font-serif mb-8 tracking-widest uppercase text-gray-300 border-b border-white/5 pb-4">Personal Profile</h2>
+            <div className="space-y-8">
+                <div className="group">
+                    <span className="block text-gray-500 text-[9px] uppercase tracking-widest mb-2 font-bold group-hover:text-[#c9a36b] transition-colors">Full Identity</span>
                     {isEditing ? (
                         <input
                             type="text"
                             value={editData.name}
                             onChange={(e) => setEditData({...editData, name: e.target.value})}
-                            className="w-full bg-white/5 border border-white/10 px-4 py-2 rounded-sm focus:border-[#c9a36b] outline-none text-white transition"
+                            className="w-full bg-white/5 border border-white/10 px-4 py-3 rounded-sm focus:border-[#c9a36b] outline-none text-white transition text-sm"
                         />
                     ) : (
-                        <span className="text-lg">{user.name}</span>
+                        <span className="text-base tracking-wide block border-l-2 border-[#c9a36b]/20 pl-4">{user.name}</span>
                     )}
                 </div>
-                <div>
-                    <span className="block text-gray-500 text-xs uppercase mb-2">Email Address</span>
-                    <span className="text-gray-400">{user.email}</span>
+                <div className="group">
+                    <span className="block text-gray-500 text-[9px] uppercase tracking-widest mb-2 font-bold">Encrypted Email</span>
+                    <span className="text-gray-400 text-sm tracking-wide block border-l-2 border-white/5 pl-4">{user.email}</span>
                 </div>
-                <div>
-                    <span className="block text-gray-500 text-xs uppercase mb-2">Phone Number</span>
+                <div className="group">
+                    <span className="block text-gray-500 text-[9px] uppercase tracking-widest mb-2 font-bold group-hover:text-[#c9a36b] transition-colors">Direct Contact</span>
                     {isEditing ? (
                         <input
                             type="tel"
                             value={editData.phone}
                             onChange={(e) => setEditData({...editData, phone: e.target.value})}
-                            className="w-full bg-white/5 border border-white/10 px-4 py-2 rounded-sm focus:border-[#c9a36b] outline-none text-white transition"
+                            className="w-full bg-white/5 border border-white/10 px-4 py-3 rounded-sm focus:border-[#c9a36b] outline-none text-white transition text-sm"
                         />
                     ) : (
-                        <span className="text-lg">{user.phone || "Not provided"}</span>
+                        <span className="text-base tracking-wide block border-l-2 border-[#c9a36b]/20 pl-4">{user.phone || "Not linked"}</span>
                     )}
                 </div>
                 
-                {isEditing && (
-                    <div className="flex gap-3 pt-4">
-                        <Button 
-                            onClick={handleSave} 
-                            disabled={saving}
-                            variant="primary" 
-                            size="sm" 
-                            className="flex-1"
+                <AnimatePresence mode="wait">
+                    {isEditing && (
+                        <motion.div 
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="flex gap-3 pt-6 overflow-hidden"
                         >
-                            {saving ? "Saving..." : "Save Changes"}
-                        </Button>
-                        <Button 
-                            onClick={() => { setIsEditing(false); setEditData({ name: user.name, phone: user.phone || '' }); }} 
-                            variant="outline" 
-                            size="sm"
-                            className="flex-1"
-                        >
-                            Cancel
-                        </Button>
-                    </div>
-                )}
+                            <Button 
+                                onClick={handleSave} 
+                                disabled={saving}
+                                variant="primary" 
+                                size="sm" 
+                                className="flex-1 text-[10px]"
+                            >
+                                {saving ? "Updating..." : "Confirm Changes"}
+                            </Button>
+                            <Button 
+                                onClick={() => { setIsEditing(false); setEditData({ name: user.name, phone: user.phone || '' }); }} 
+                                variant="outline" 
+                                size="sm"
+                                className="flex-1 text-[10px]"
+                            >
+                                Cancel
+                            </Button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
-        </div>
+        </motion.div>
 
         {/* Order History */}
-        <div className="md:col-span-2">
-            <h2 className="text-xl font-serif mb-6 tracking-wide">Order History</h2>
+        <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="md:col-span-2"
+        >
+            <h2 className="text-lg font-serif mb-8 tracking-widest uppercase text-gray-300">Acquisition History</h2>
             
             {myOrders.length === 0 ? (
-                <p className="text-gray-400">You haven't placed any orders yet.</p>
+                <div className="bg-white/[0.02] border border-dashed border-white/10 p-12 text-center rounded-sm">
+                    <p className="text-gray-500 italic tracking-wide">Your collection journey hasn't started yet.</p>
+                    <Button to="/shop" variant="outline" size="sm" className="mt-6 text-[10px]">
+                        Begin Exploration
+                    </Button>
+                </div>
             ) : (
-                <div className="space-y-4">
-                    {myOrders.slice().reverse().map(order => (
-                        <div key={order.id} className="bg-white/5 border border-white/10 p-6 rounded-sm flex justify-between items-center hover:border-[#c9a36b]/30 transition">
+                <div className="space-y-6">
+                    {myOrders.slice().reverse().map((order, idx) => (
+                        <motion.div 
+                            key={order.id} 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 + (idx * 0.1) }}
+                            className="group bg-[#0a0a0a] border border-white/10 p-6 rounded-sm flex flex-col sm:flex-row justify-between items-start sm:items-center hover:border-[#c9a36b]/40 transition duration-500 shadow-xl relative"
+                        >
+                            <div className="absolute top-0 right-0 w-24 h-[1px] bg-gradient-to-l from-[#c9a36b]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                             <div>
-                                <p className="text-[#c9a36b] text-sm mb-1 uppercase tracking-widest">Order ID: {order.id.slice(0,8)}</p>
-                                <p className="text-xs text-gray-500 mb-2">{new Date(order.date).toLocaleDateString()}</p>
-                                <p className="text-sm font-medium">{order.items.length} items • ₹{order.total.toLocaleString()}</p>
+                                <div className="flex items-center gap-3 mb-2">
+                                    <p className="text-[#c9a36b] text-xs font-bold uppercase tracking-[0.2em]">Order #{order.id.slice(0,8)}</p>
+                                    <span className="text-[10px] text-gray-500">• {new Date(order.date).toLocaleDateString()}</span>
+                                </div>
+                                <p className="text-sm font-light tracking-wide text-gray-300">
+                                    {order.items.length} {order.items.length === 1 ? 'Masterpiece' : 'Masterpieces'} 
+                                    <span className="mx-2 text-white/10">|</span> 
+                                    <span className="text-white font-medium">₹{order.total.toLocaleString()}</span>
+                                </p>
                             </div>
-                            <div className="text-right">
-                                <span className={`inline-block px-3 py-1 text-xs rounded-full mb-3 ${
-                                    order.status === 'Completed' ? 'bg-green-900/50 text-green-400' :
-                                    order.status === 'Pending' ? 'bg-yellow-900/50 text-yellow-400' :
-                                    'bg-red-900/50 text-red-400'
+                            <div className="mt-4 sm:mt-0 flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                                <span className={`text-[10px] uppercase tracking-widest px-3 py-1 rounded-sm border ${
+                                    order.status === 'Completed' ? 'border-green-500/20 text-green-500 bg-green-500/5' :
+                                    order.status === 'Pending' ? 'border-yellow-500/20 text-yellow-500 bg-yellow-500/5' :
+                                    'border-red-500/20 text-red-500 bg-red-500/5'
                                 }`}>
                                     {order.status}
                                 </span>
+                                <button className="text-[10px] uppercase tracking-[0.2em] text-[#c9a36b] hover:text-white transition font-bold group-hover:translate-x-1 duration-300">
+                                    Track →
+                                </button>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             )}
-        </div>
+        </motion.div>
       </div>
 
       {/* Extreme Bottom Actions */}

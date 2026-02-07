@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const About = () => {
     return (
-      <div className="min-h-screen text-white pt-40 pb-20 px-6 bg-black">
+      <div className="min-h-screen text-white pt-24 md:pt-40 pb-20 px-6 bg-black">
         <div className="max-w-5xl mx-auto">
           
           <div className="grid md:grid-cols-2 gap-16 items-center mb-32">
@@ -39,7 +39,7 @@ const About = () => {
              </motion.div>
           </div>
   
-          <div className="grid md:grid-cols-3 gap-12 mb-20">
+          <div className="grid md:grid-cols-3 gap-8 md:gap-12 mb-20 items-stretch">
               {[
                 { title: "Artistry", text: "Every design entails hours of meticulous hand-sketching and 3D modeling before it comes to life." },
                 { title: "Purity", text: "We certify every diamond and gemstone, ensuring ethical sourcing and supreme quality." },
@@ -51,10 +51,11 @@ const About = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.2, duration: 0.8 }}
-                    className="p-10 border-t border-white/10 hover:border-[#c9a36b] transition duration-500 group"
+                    className="p-8 md:p-10 border border-white/5 bg-white/[0.02] rounded-sm hover:border-[#c9a36b]/40 transition duration-500 group flex flex-col h-full"
                   >
-                      <h3 className="text-3xl font-serif mb-6 text-[#f5e9d6] group-hover:text-[#c9a36b] transition">{item.title}</h3>
-                      <p className="text-gray-500 text-sm leading-7 tracking-wide">{item.text}</p>
+                      <div className="w-8 h-[1px] bg-[#c9a36b] mb-6 group-hover:w-full transition-all duration-700" />
+                      <h3 className="text-2xl md:text-3xl font-serif mb-6 text-[#f5e9d6] group-hover:text-[#c9a36b] transition">{item.title}</h3>
+                      <p className="text-gray-500 text-sm leading-7 tracking-wide font-light">{item.text}</p>
                   </motion.div>
               ))}
           </div>

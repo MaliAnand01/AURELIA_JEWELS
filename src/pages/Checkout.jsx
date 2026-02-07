@@ -7,13 +7,20 @@ import { StorageService } from "../services/storage";
 import Button from "../components/Button";
 import toast from "react-hot-toast";
 import confetti from 'canvas-confetti';
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Gift, PenTool, Sparkles, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Checkout = () => {
   const { cart, dispatch } = useContext(CartContext);
   const { user } = useContext(AuthContext);
   const { register, handleSubmit, reset, setValue } = useForm();
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [gifting, setGifting] = useState({
+    isGift: false,
+    wrap: false,
+    message: false,
+    messageContent: ""
+  });
   const navigate = useNavigate();
 
   const handlePincodeLookup = async (pincode) => {
@@ -34,10 +41,17 @@ const Checkout = () => {
       }
   };
 
-  const total = cart.reduce(
+  const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.qty,
     0
   );
+
+  const GIFT_WRAP_PRICE = 500;
+  const GIFT_MESSAGE_PRICE = 200;
+  
+  const total = subtotal + 
+                (gifting.wrap ? GIFT_WRAP_PRICE : 0) + 
+                (gifting.message ? GIFT_MESSAGE_PRICE : 0);
 
   const onSubmit = (data) => {
     const orderData = {
@@ -45,6 +59,11 @@ const Checkout = () => {
         shipping: data,
         items: cart,
         total: total,
+        gifting: gifting.isGift ? {
+            wrap: gifting.wrap,
+            message: gifting.message,
+            messageContent: gifting.messageContent
+        } : null
     };
     
     StorageService.addOrder(orderData);
@@ -107,10 +126,117 @@ const Checkout = () => {
               </div>
             ))}
 
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>Subtotal</span>
+              <span>₹{subtotal.toLocaleString()}</span>
+            </div>
+
+            {gifting.wrap && (
+              <div className="flex justify-between text-sm text-[#c9a36b] mb-2 font-medium">
+                <span className="flex items-center gap-2 italic"><Sparkles size={12}/> Luxury Gift Wrap</span>
+                <span>₹{GIFT_WRAP_PRICE.toLocaleString()}</span>
+              </div>
+            )}
+
+            {gifting.message && (
+              <div className="flex justify-between text-sm text-[#c9a36b] mb-2 font-medium">
+                <span className="flex items-center gap-2 italic"><PenTool size={12}/> Wax-Sealed Note</span>
+                <span>₹{GIFT_MESSAGE_PRICE.toLocaleString()}</span>
+              </div>
+            )}
+
             <div className="flex justify-between font-medium mt-6 pt-6 border-t border-white/10 text-lg">
-              <span>Total</span>
+              <span>Total Amount</span>
               <span className="text-[#c9a36b]">₹{total.toLocaleString()}</span>
             </div>
+          </div>
+
+          {/* Gifting Options */}
+          <div className="mt-8 bg-white/[0.02] border border-white/10 p-8 rounded-sm">
+             <div 
+                className="flex items-center justify-between cursor-pointer"
+                onClick={() => setGifting({...gifting, isGift: !gifting.isGift})}
+             >
+                <div className="flex items-center gap-4">
+                    <div className={`p-2 rounded-full transition-colors ${gifting.isGift ? 'bg-[#c9a36b] text-black' : 'bg-white/5 text-gray-500'}`}>
+                        <Gift size={20} />
+                    </div>
+                    <div>
+                        <h4 className="text-sm font-serif tracking-widest uppercase">Premium Gifting</h4>
+                        <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">Add a touch of heritage to your acquisition</p>
+                    </div>
+                </div>
+                <motion.div
+                    animate={{ rotate: gifting.isGift ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                >
+                    <ChevronDown size={20} className="text-gray-500" />
+                </motion.div>
+             </div>
+
+             <AnimatePresence>
+                {gifting.isGift && (
+                    <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                    >
+                        <div className="pt-8 space-y-6">
+                            <div 
+                                className={`flex items-center justify-between p-4 border rounded-sm cursor-pointer transition ${gifting.wrap ? 'border-[#c9a36b] bg-[#c9a36b]/5' : 'border-white/5 bg-transparent'}`}
+                                onClick={() => setGifting({...gifting, wrap: !gifting.wrap})}
+                            >
+                                <div className="flex items-center gap-4">
+                                    <Sparkles size={16} className={gifting.wrap ? 'text-[#c9a36b]' : 'text-gray-600'} />
+                                    <div>
+                                        <p className="text-xs uppercase tracking-widest font-bold">Luxury Gift Wrap</p>
+                                        <p className="text-[10px] text-gray-500 mt-1">Silk ribbon & signature gold-foil packaging</p>
+                                    </div>
+                                </div>
+                                <span className="text-xs font-bold text-[#c9a36b]">₹{GIFT_WRAP_PRICE}</span>
+                            </div>
+
+                            <div 
+                                className={`p-4 border rounded-sm transition ${gifting.message ? 'border-[#c9a36b] bg-[#c9a36b]/5' : 'border-white/5 bg-transparent'}`}
+                            >
+                                <div 
+                                    className="flex items-center justify-between cursor-pointer"
+                                    onClick={() => setGifting({...gifting, message: !gifting.message})}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <PenTool size={16} className={gifting.message ? 'text-[#c9a36b]' : 'text-gray-600'} />
+                                        <div>
+                                            <p className="text-xs uppercase tracking-widest font-bold">Personalized Note</p>
+                                            <p className="text-[10px] text-gray-500 mt-1">Hand-written message with wax seal</p>
+                                        </div>
+                                    </div>
+                                    <span className="text-xs font-bold text-[#c9a36b]">₹{GIFT_MESSAGE_PRICE}</span>
+                                </div>
+
+                                <AnimatePresence>
+                                    {gifting.message && (
+                                        <motion.div 
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            className="overflow-hidden pt-4"
+                                        >
+                                            <textarea 
+                                                value={gifting.messageContent}
+                                                onChange={(e) => setGifting({...gifting, messageContent: e.target.value})}
+                                                placeholder="Write your message here... Our calligrapher will transcribe it onto parchment."
+                                                className="w-full bg-black/40 border border-white/10 p-4 text-xs font-light tracking-wide outline-none focus:border-[#c9a36b] transition rounded-sm resize-none"
+                                                rows="3"
+                                            />
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+             </AnimatePresence>
           </div>
 
           {/* Address form */}
@@ -201,8 +327,12 @@ const Checkout = () => {
 
       {/* Success popup */}
       {orderPlaced && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-[100]">
-          <div className="bg-[#0a0a0a] border border-[#c9a36b]/30 text-white p-12 text-center max-w-lg w-full rounded-sm shadow-2xl relative overflow-hidden">
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-xl flex items-center justify-center z-[150] p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-[#0a0a0a] border border-[#c9a36b]/30 text-white p-8 md:p-12 text-center max-w-lg w-full rounded-sm shadow-2xl relative overflow-hidden"
+          >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#c9a36b] to-transparent opacity-50" />
             
             <div className="flex justify-center mb-6">
@@ -234,7 +364,7 @@ const Checkout = () => {
                 Track Order
                 </Button>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
     </div>

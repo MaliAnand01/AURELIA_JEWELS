@@ -29,7 +29,7 @@ const ProductCard = ({ product, showMoveToCart = false, onMoveToCart = null }) =
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10px" }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="group border border-[#c9a36b]/20 bg-white/5 rounded-sm p-4 hover:border-[#c9a36b]/60 transition-all duration-300 relative will-change-transform"
+      className="group border border-[#c9a36b]/20 bg-white/5 rounded-sm p-4 hover:border-[#c9a36b]/60 transition-all duration-300 relative will-change-transform active:scale-[0.98] sm:active:scale-100"
     >
       <div className="overflow-hidden mb-4 relative aspect-[3/4] bg-white/5">
         <Link to={`/product/${product.id}`}>
@@ -44,7 +44,7 @@ const ProductCard = ({ product, showMoveToCart = false, onMoveToCart = null }) =
         </Link>
         <button 
             onClick={toggleWishlist}
-            className="absolute top-3 right-3 bg-black/40 backdrop-blur-md p-2 rounded-full hover:bg-white hover:text-red-500 transition z-10"
+            className="absolute top-3 right-3 bg-black/40 backdrop-blur-md p-2 rounded-full hover:bg-white hover:text-red-500 transition z-10 active:scale-75"
         >
             <Heart size={18} className={inWishlist ? "fill-red-500 text-red-500" : "text-white"} />
         </button>
